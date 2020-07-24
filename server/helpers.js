@@ -1,9 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 
-export function readFile() {
+export function readFile(filename) {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.resolve(__dirname, '..', 'data', filename), 'utf8', (err, jsonString) => {
+    fs.readFile(path.resolve(__dirname, 'data', filename), 'utf8', (err, jsonString) => {
       if (err) {
         console.log('read file error', err);
         reject(false);
@@ -23,16 +23,17 @@ export function readFile() {
   })
 };
 
-export function updateFile() {
+export function updateFile(filename, data) {
   return new Promise((resolve, reject) => {
-    fs.writeFile(path.resolve(__dirname, '..', 'data', filename), err => {
+    const _path = path.resolve(__dirname, 'data', filename);
+
+    fs.writeFile(_path, JSON.stringify({ data }), 'utf8', err => {
       if (err) {
-        console.log('write file error', err);
-        reject(false);
+        console.log('update file error', err);
+        reject(err);
         return;
       }
-
       resolve(true);
-    })
-  })
-};
+    });
+  });
+}

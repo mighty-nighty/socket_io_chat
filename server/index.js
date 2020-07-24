@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
 import socket from 'socket.io';
-import events from './events';
+import events from '../shared/events';
 import { readFile, updateFile } from './helpers';
 
 dotenv.config();
@@ -29,7 +29,7 @@ const server = app.listen(port, () => {
 const io = socket(server);
 
 io.on('connection', socket => {
-  console.log('user connected'.socket.id);
+  console.log('user connected', socket.id);
 
   socket.on(events.CHOOSE_USER_FROM_CLIENT, async ({ id }) => {
     socket.broadcast.emit(events.CHOOSE_USER_FROM_SERVER, { id })

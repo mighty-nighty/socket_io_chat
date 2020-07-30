@@ -1,1 +1,1 @@
-{"data":[{"id":1,"name":"Вася Петров","nickname":"","available":true,"avatar":"1.jpg"},{"id":2,"name":"Петя Иванов","nickname":"","available":false,"avatar":"2.jpg"},{"id":3,"name":"Лол Петрович","nickname":"","available":true,"avatar":"3.jpg"},{"id":4,"name":"Колян Безфамильный","nickname":"","available":true,"avatar":"4.jpg"}]}
+{"data":[{"id":1,"name":"Васька","available":true,"avatar":"1.jpg"},{"id":2,"name":"Барсик","available":false,"avatar":"2.jpg"},{"id":3,"name":"Пушок","available":true,"avatar":"3.jpg"},{"id":4,"name":"Тигра","available":true,"avatar":"4.jpg"}]}

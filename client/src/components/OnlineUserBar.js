@@ -16,11 +16,14 @@ const OnlineUserBar = ({ user, className }) => {
 };
 
 const StyledOnlineUserBar = styled(OnlineUserBar)`
-  display: grid;
-  grid-template-columns: 65px auto;
-  line-height: 65px;
-  grid-gap: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   margin-bottom: 20px;
+
+  span {
+    margin-left: 12px;
+  }
 `;
 
 export default StyledOnlineUserBar;

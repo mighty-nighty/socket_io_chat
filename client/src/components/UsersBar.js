@@ -9,7 +9,7 @@ import Avatar from 'components/Avatar';
 const UsersBar = ({ onChoose = f => f, socket, className }) => {
   const [users, setUsers] = useState([]);
 
-  useEffect(function() {
+  useEffect(function () {
     const fetchUsers = async () => {
       const response = await axios(`${consts.SOCKET_URL}/users`);
       setUsers(response.data);
@@ -21,9 +21,9 @@ const UsersBar = ({ onChoose = f => f, socket, className }) => {
         users.map(user =>
           user.id === id
             ? {
-                ...user,
-                available: false
-              }
+              ...user,
+              available: false
+            }
             : user
         )
       );
@@ -34,83 +34,118 @@ const UsersBar = ({ onChoose = f => f, socket, className }) => {
         users.map(user =>
           user.id === id
             ? {
-                ...user,
-                available: true
-              }
+              ...user,
+              available: true
+            }
             : user
         )
       );
     };
 
-    socket.on(events.ENABLE_USER_FROM_SERVER, enableHandle);
-    socket.on(events.CHOOSE_USER_FROM_SERVER, chooseHandle);
+    socket.on(events.ENABLE_USER_SERVER, enableHandle);
+    socket.on(events.CHOOSE_USER_SERVER, chooseHandle);
 
     return () => {
-      socket.off(events.CHOOSE_USER_FROM_SERVER, chooseHandle);
-      socket.off(events.ENABLE_USER_FROM_SERVER, enableHandle);
+      socket.off(events.CHOOSE_USER_SERVER, chooseHandle);
+      socket.off(events.ENABLE_USER_SERVER, enableHandle);
     };
   }, []);
 
   if (users.length < 1) {
-    return <span style={{padding: '3px 0 0 6px', color: 'blue'}}>No active users...</span>
+    return <span style={{ padding: '3px 0 0 6px', color: 'blue' }}>No active users...</span>
   }
 
+  const viewWidth = window.innerWidth;
+
   return (
-    <ul className={className}>
-      {users.map((user, i) => (
-        <li key={i}>
-          <Avatar
-            src={`${consts.IMAGES_FOLDER_URL}/${user.avatar}`}
-            online={!user.available}
-            size={'medium'}
-          />
-          <h4>{`${user.name}`}</h4>
-          {user.available ? (
-            <button onClick={() => onChoose(user)}>Выбрать</button>
-          ) : (
-            <button disabled>Занят</button>
-          )}
-        </li>
-      ))}
-    </ul>
+    <div className={className}>
+      <ul>
+        {users.map((user, i) => (
+          <li key={i}>
+            <Avatar
+              src={`${consts.IMAGES_FOLDER_URL}/${user.avatar}`}
+              online={!user.available}
+              size={viewWidth <= 480 ? 'medium' : ''}
+            />
+            <p>{`${user.name}`}</p>
+            {user.available ? (
+              <button onClick={() => onChoose(user)}>Выбрать</button>
+            ) : (
+                <button disabled>Занят</button>
+              )}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
 const StyledUsersBar = styled(UsersBar)`
-  list-style-type: none;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto;
-  grid-gap: 10px;
-  padding: 10px 0;
+  width: 100%;
+  max-width: 500px;
+  padding: 10px 10px;
   text-align: center;
-  border-bottom: 1px solid #ddd;
-  border-top: 1px solid #ddd;
+  border: 1px solid #ddd;
+  border-radius: 6px;
   margin-bottom: 10px;
-  margin-top: -10px;
+  box-sizing: border-box;  
 
-  > li > h4 {
-    font-size: 0.725em;
-    margin-top: 10px;
-    height: 24px;
+  ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-inline-start: 0;  
+  }  
+
+  li {
+    margin: 5px 10px;
+    max-width: 80px;
   }
 
-  > li > button {
+  li > h4 {
+    font-size: 0.725em;
+    margin-top: 10px;
+    height: 26px;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+  }
+
+  li > button {
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 0.4em 1.4em;
     font-size: 0.675em;
-    background: linear-gradient(-45deg, #ea5504 0%, #a50b00 100%);
+    background: #008080;
     color: #fff;
-    font-weight: 700;
+    font-weight: 500;
     min-width: 80px;
+    min-height: 28px;
     border-width: unset;
     cursor: pointer;
+    transition: all .3s ease;   
 
     &:disabled {
       background: #ddd;
       color: #666;
       cursor: not-allowed;
+    }
+
+    &:hover:not([disabled]) {
+      background: #20B2AA;
+    }    
+  }
+
+  @media (max-width: 480px) {
+    ul {
+      justify-content: center;
+      flex-wrap: wrap;
+      padding-inline-start: 0;  
+    }
+
+    li {
+      margin: 12px 16px;
+      max-width: 80px;
     }
   }
 `;
